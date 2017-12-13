@@ -31,7 +31,7 @@ const Options = ({
             </div>
             <a
                 className='github'
-                href='#'
+                href='https://github.com/cbass10liu/word-circle'
                 target="_blank"
             >
                 github

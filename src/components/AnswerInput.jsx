@@ -16,6 +16,7 @@ export default class AnswerInput extends Component {
             input: '',
             message: '',
             placeholder: 'enter answer here',
+            allowSubmit: true,
         };
         this.onFocus = this._onFocus.bind(this);
         this.onBlur = this._onBlur.bind(this);
@@ -51,37 +52,47 @@ export default class AnswerInput extends Component {
     }
 
     _handleKeyDown(e) {
-        if (e.key.toLowerCase() === 'enter') {
-            this._handleSubmit();
-        } else {
-            this.setState({
-                message: '',
-            });
+        if (this.state.allowSubmit) {
+            if (e.key.toLowerCase() === 'enter') {
+                this._handleSubmit();
+            } else {
+                this.setState({
+                    message: '',
+                });
+            }
         }
     }
 
     _displayMessage(message) {
         this.setState({
             message: message,
+        }, () => {
+            setTimeout(() => {
+                this.setState({
+                    message: '',
+                });
+            }, 1000);
         });
-        setTimeout(() => {
-            this.setState({
-                message: '',
-            });
-        }, 1000);
     }
 
     _handleSubmit() {
-        if (this._isCorrect(this.state.input)) {
-            this._displayMessage('correct!');
-            setTimeout(() => {
+        if (this.state.allowSubmit) {
+            if (this._isCorrect(this.state.input)) {
+                this._displayMessage('correct!');
                 this.setState({
-                    input: '',
+                    allowSubmit: false,
+                }, () => {
+                    setTimeout(() => {
+                        this.setState({
+                            input: '',
+                            allowSubmit: true,
+                        });
+                        this.props.getNewWord();
+                    }, 1000);
                 });
-                this.props.getNewWord();
-            }, 1000);
-        } else {
-            this._displayMessage('try again!');
+            } else {
+                this._displayMessage('try again!');
+            }
         }
     }
 

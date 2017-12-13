@@ -7,10 +7,17 @@ import AnswerInput from './AnswerInput';
 
 export default class Game extends Component {
 
+    static get propTypes() {
+        return {
+            words: PropTypes.array.isRequired,
+        }
+    }
+
     constructor() {
         super();
         this.state = {
-            word: 'philosophy',
+            word: '',
+            shiftedWord: '',
             shouldDisplaySolution: false,
         };
         this.toggleDisplaySolution = this._toggleDisplaySolution.bind(this);
@@ -18,11 +25,20 @@ export default class Game extends Component {
     }
 
     componentWillMount() {
-        this._shiftWord();
+        this._getNewWord();
     }
 
     componentDidUpdate() {
+        this._circleTransform();
+    }
+
+    _circleTransform() {
         new CircleType(document.getElementById('circle-type'));
+    }
+
+    _chooseRandomWord() {
+        const random = Math.floor(Math.random() * this.props.words.length);
+        return this.props.words[random];
     }
 
     _shiftWord() {
@@ -49,7 +65,7 @@ export default class Game extends Component {
 
     _getNewWord() {
         this.setState({
-            word: this.state.word === 'philosophy' ? 'mathematics' : 'philosophy',
+            word: this._chooseRandomWord(),
         }, () => {
             this._shiftWord();
         });
