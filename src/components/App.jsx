@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Game from './Game';
 
-fetch('./src/words.json').then((response) => {
+fetch('./words.json').then((response) => {
     return response.json();
 }).then((data) => {
     const words = data.words;
