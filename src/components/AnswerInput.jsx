@@ -98,7 +98,7 @@ export default class AnswerInput extends Component {
 
     _isCorrect() {
         const input = this.state.input.trim().toLowerCase();
-        return input === this.props.solution;
+        return input === this.props.solution.trim().toLowerCase();
     }
 
     render() {

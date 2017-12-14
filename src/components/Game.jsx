@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CircleType from 'circletype';
+import axios from 'axios';
 import Options from './Options';
 import Word from './Word';
 import AnswerInput from './AnswerInput';
+import WordnikUtil from '../utils/WordnikUtil';
+import apiKey from '../../apiKey';
 
 export default class Game extends Component {
-
-    static get propTypes() {
-        return {
-            words: PropTypes.array.isRequired,
-        }
-    }
 
     constructor() {
         super();
@@ -64,10 +61,16 @@ export default class Game extends Component {
     }
 
     _getNewWord() {
-        this.setState({
-            word: this._chooseRandomWord(),
-        }, () => {
-            this._shiftWord();
+        axios.get(`${WordnikUtil.BASE_URL}\?excludePartOfSpeech\=${WordnikUtil.exclude}\&minCorpusCount\=100000\&minLength\=6\&maxLength\=10\&api_key\=${apiKey.wordnikApiKey}`)
+        .then((response) => {
+            this.setState({
+                word: response.data.word,
+            }, () => {
+                this._shiftWord();
+            });
+        })
+        .catch((error) => {
+            console.log(error);
         });
     }
 
